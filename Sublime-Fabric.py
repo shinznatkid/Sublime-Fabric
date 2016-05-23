@@ -61,6 +61,7 @@ class TaskFabric(object):
         self.view.settings().set("indent_subsequent_lines", False)
         self.view.settings().set("detect_indentation", False)
         self.view.settings().set("auto_complete", False)
+        self.view.settings().set("show_line_endings", False)
         self.view.set_scratch(True)
         self.view.set_read_only(True)
         self.view.set_name("[FABRIC] [%s]" % task)

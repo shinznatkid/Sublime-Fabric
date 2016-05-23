@@ -40,12 +40,23 @@ class FabricWrapper(object):
         Find and return (per folder) `filename` in project folders.
         """
         for folder in self.folders:
-            params = ['find', folder, '-name', filename]
-            stdout = subprocess.Popen(params,
-                                      stdout=subprocess.PIPE).stdout.read()
-            found = stdout.decode().split('\n')
-            if found:
-                yield found
+            ret = []
+            for root, _, files in os.walk(folder):
+                if filename in files:
+                    ret.append(os.path.join(root, filename))
+            if ret:
+                yield ret
+
+            # file_path = os.path.join(folder, filename)
+            # if os.path.isfile(file_path):
+            #     yield [file_path]
+
+            # params = ['find', folder, '-name', filename]
+            # stdout = subprocess.Popen(params,
+            #                           stdout=subprocess.PIPE).stdout.read()
+            # found = stdout.decode().split('\n')
+            # if found:
+            #     yield found
 
     def get_tasks(self, fabfile_name):
         """
@@ -67,6 +78,7 @@ class FabricWrapper(object):
             raise TaskException(stderr.decode())
 
         ft = list(filter(None, stdout.decode().split('\n')))
+        ft = [x.strip() for x in ft]
         self._tasks[fabfile_name] = (os.stat(fabfile_name).st_mtime, ft)
 
         return self._tasks[fabfile_name][1]

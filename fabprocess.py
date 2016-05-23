@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 import sys
 import subprocess
 
@@ -14,10 +15,12 @@ class ProcessFab(object):
         self.path = path
         self.task = task
 
+        dir_path = os.path.dirname(os.path.abspath(self.path))
         query = [fabric_wrapper.fab, self.task, '-f', self.path]
         params = dict(bufsize=1, close_fds='posix' in sys.builtin_module_names,
                       stderr=subprocess.STDOUT, stdin=subprocess.PIPE,
-                      stdout=subprocess.PIPE)
+                      stdout=subprocess.PIPE,
+                      cwd=dir_path)
 
         self.popen = subprocess.Popen(query, **params)
 
