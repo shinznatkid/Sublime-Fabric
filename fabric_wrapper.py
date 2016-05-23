@@ -70,7 +70,7 @@ class FabricWrapper(object):
 
         result = subprocess.Popen(
             [self.fab, '--shortlist', '-f', fabfile_name],
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
 
         stdout, stderr = result.stdout.read(), result.stderr.read()
 
